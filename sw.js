@@ -1,5 +1,5 @@
 // Service Worker for Oil Intel — GitHub Pages sub-path aware
-const CACHE = 'oil-intel-v3';
+const CACHE = 'oil-intel-v4';
 const BASE  = '/Market_updates'; // GitHub Pages repo sub-path
 
 const ASSETS = [
