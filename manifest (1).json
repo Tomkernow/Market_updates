@@ -1,0 +1,27 @@
+{
+  "name": "Oil Market Intelligence",
+  "short_name": "Oil Intel",
+  "description": "Live oil market news, prices and AI analyst — Brent, WTI, OPEC+, Hormuz crisis",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0c0e10",
+  "theme_color": "#0c0e10",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["finance", "productivity", "business"],
+  "lang": "en"
+}
