@@ -429,7 +429,7 @@ document.getElementById("chatInput").addEventListener("keydown", e => {
   if (e.key==="Enter" && !e.shiftKey) { e.preventDefault(); sendChat(); }
 });
 
-if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
+// service worker removed — not needed for this deployment
 
 // Load news on startup
 loadNews(false);
