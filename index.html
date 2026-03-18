@@ -10,8 +10,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Oil Intel"/>
-<link rel="manifest" href="/manifest.json"/>
-<link rel="apple-touch-icon" href="/icon-192.png"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icon-192.png"/>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -24,11 +24,9 @@
     --mono: 'Courier New', monospace;
   }
   html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.6; overflow: hidden; }
-
-  /* ── LAYOUT ── */
   .shell { display: grid; grid-template-rows: 52px 1fr; grid-template-columns: 250px 1fr 310px; height: 100vh; }
 
-  /* ── TOPBAR ── */
+  /* TOPBAR */
   .topbar { grid-column: 1 / -1; display: flex; align-items: center; gap: 16px; padding: 0 16px; border-bottom: 1px solid var(--border); background: var(--bg2); overflow: hidden; }
   .logo { font-family: var(--mono); font-size: 11px; font-weight: bold; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; }
   .ticker-wrap { flex: 1; overflow: hidden; height: 52px; display: flex; align-items: center; min-width: 0; }
@@ -38,19 +36,18 @@
   @keyframes blink { 0%,100%{opacity:1}50%{opacity:0.2} }
   .date-lbl { font-size: 11px; color: var(--text3); font-family: var(--mono); white-space: nowrap; }
 
-  /* ── SIDEBAR ── */
+  /* SIDEBAR */
   .sidebar { border-right: 1px solid var(--border); background: var(--bg2); overflow-y: auto; padding: 12px 0; }
   .sidebar::-webkit-scrollbar { width: 3px; }
   .sidebar::-webkit-scrollbar-thumb { background: var(--border2); }
   .slabel { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); padding: 0 14px 6px; margin-top: 10px; display: block; }
   .pcard { margin: 4px 10px 8px; padding: 10px 12px; background: var(--bg3); border: 1px solid var(--border); border-radius: 7px; }
   .pcard-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
-  .pcard-title span { font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--green); font-size: 9px; }
+  .pcard-live { font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--green); font-size: 9px; }
   .prow { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
   .prow:last-child { border-bottom: none; }
   .pname { color: var(--text2); }
   .pval { font-family: var(--mono); font-weight: bold; }
-  .pchg { font-family: var(--mono); font-size: 11px; margin-left: 4px; }
   .up { color: var(--green); } .dn { color: var(--red); }
   .war-banner { margin: 0 10px 8px; padding: 9px 12px; background: rgba(224,80,80,0.08); border: 1px solid rgba(224,80,80,0.25); border-radius: 7px; font-size: 11px; color: #f09090; line-height: 1.5; }
   .war-banner strong { color: #e05050; display: block; margin-bottom: 3px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; }
@@ -62,7 +59,7 @@
   .src-chip { font-size: 11px; padding: 2px 7px; border-radius: 4px; cursor: pointer; border: 1px solid var(--border2); color: var(--text2); background: transparent; transition: opacity 0.12s; }
   .src-chip.off { opacity: 0.28; }
 
-  /* ── MAIN FEED ── */
+  /* MAIN */
   .main { overflow-y: auto; display: flex; flex-direction: column; }
   .main::-webkit-scrollbar { width: 3px; }
   .main::-webkit-scrollbar-thumb { background: var(--border); }
@@ -76,13 +73,18 @@
   .rspin { display: inline-block; }
   .refresh-btn.spinning .rspin { animation: rot 0.7s linear infinite; }
   @keyframes rot { to { transform: rotate(360deg); } }
-  .refresh-toast { font-size: 11px; color: var(--green); text-align: right; padding: 2px 18px; min-height: 18px; flex-shrink: 0; }
+  .refresh-toast { font-size: 11px; color: var(--green); padding: 3px 18px; min-height: 20px; flex-shrink: 0; }
+  .refresh-toast.red { color: var(--red); }
   .news-list { flex: 1; }
 
-  /* ── NEWS CARDS ── */
+  /* NEWS CARDS */
   .ncard { border-bottom: 1px solid var(--border); padding: 14px 18px; cursor: pointer; transition: background 0.1s; }
   .ncard:hover { background: var(--bg2); }
   .ncard.expanded { background: var(--bg2); }
+  .ncard.new-article { animation: flashIn 1.4s ease-out; }
+  @keyframes flashIn { 0%{background:rgba(232,168,64,0.14)}100%{background:transparent} }
+  .new-badge { display: inline-block; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 1px 5px; border-radius: 3px; background: rgba(232,168,64,0.2); color: var(--accent); border: 1px solid rgba(232,168,64,0.3); margin-left: 4px; vertical-align: middle; }
+  .pin-icon { font-size: 10px; opacity: 0.5; margin-left: 3px; cursor: default; vertical-align: middle; }
   .nmeta { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; flex-wrap: wrap; }
   .sbadge { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.04em; }
   .sb-reuters  { background: rgba(255,120,0,0.15);   color: #ff9040; }
@@ -90,8 +92,11 @@
   .sb-cnbc     { background: rgba(0,160,200,0.15);   color: #40c0e0; }
   .sb-ft       { background: rgba(255,80,60,0.15);   color: #ff7060; }
   .sb-iea      { background: rgba(160,100,255,0.15); color: #c090ff; }
+  .sb-eia      { background: rgba(100,180,255,0.15); color: #60b0ff; }
   .sb-aljazeera{ background: rgba(80,200,100,0.15);  color: #60d070; }
   .sb-thestreet{ background: rgba(255,200,60,0.15);  color: #ffc840; }
+  .sb-cnn      { background: rgba(200,40,40,0.15);   color: #ff6060; }
+  .sb-cbsnews  { background: rgba(50,100,200,0.15);  color: #7090e0; }
   .ntime { font-size: 11px; color: var(--text3); font-family: var(--mono); }
   .ncat  { font-size: 11px; color: var(--text3); background: var(--bg3); padding: 1px 6px; border-radius: 3px; }
   .sent  { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: help; flex-shrink: 0; }
@@ -110,7 +115,7 @@
   .ask-btn { font-size: 12px; color: var(--accent2); border: 1px solid rgba(176,120,24,0.3); padding: 4px 10px; border-radius: 4px; cursor: pointer; background: transparent; font-family: var(--font); transition: background 0.12s; }
   .ask-btn:hover { background: rgba(232,168,64,0.08); }
 
-  /* ── CHAT PANEL ── */
+  /* CHAT */
   .chat-panel { border-left: 1px solid var(--border); display: flex; flex-direction: column; background: var(--bg2); overflow: hidden; }
   .chat-title { padding: 12px 14px; border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
   .chat-tag { font-family: var(--mono); font-size: 10px; color: var(--text3); padding: 2px 6px; border: 1px solid var(--border); border-radius: 3px; }
@@ -119,7 +124,7 @@
   .chat-msgs::-webkit-scrollbar-thumb { background: var(--border); }
   .cmsg { max-width: 92%; font-size: 13px; line-height: 1.55; }
   .cmsg.user { align-self: flex-end; background: rgba(232,168,64,0.12); border: 1px solid rgba(232,168,64,0.2); padding: 8px 12px; border-radius: 10px 10px 3px 10px; color: var(--text); }
-  .cmsg.ai   { align-self: flex-start; background: var(--bg3); border: 1px solid var(--border); padding: 10px 13px; border-radius: 10px 10px 10px 3px; color: var(--text); }
+  .cmsg.ai { align-self: flex-start; background: var(--bg3); border: 1px solid var(--border); padding: 10px 13px; border-radius: 10px 10px 10px 3px; color: var(--text); }
   .cmsg.ai a { color: var(--blue); }
   .typing-ind { align-self: flex-start; display: flex; gap: 4px; padding: 9px 13px; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; }
   .typing-ind span { width: 5px; height: 5px; border-radius: 50%; background: var(--text3); animation: tdot 1.2s infinite; }
@@ -134,10 +139,8 @@
   .chat-input:focus { border-color: rgba(232,168,64,0.4); }
   .chat-send { padding: 7px 13px; background: var(--accent); color: #0c0e10; font-size: 12px; font-weight: 700; border: none; border-radius: 6px; cursor: pointer; font-family: var(--font); transition: opacity 0.12s; }
   .chat-send:hover { opacity: 0.85; }
-
   ::-webkit-scrollbar { width: 3px; height: 3px; }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
   @media (max-width: 900px) {
     .shell { grid-template-columns: 1fr; grid-template-rows: 52px 1fr; overflow: hidden; }
     .sidebar, .chat-panel { display: none; }
@@ -148,94 +151,55 @@
 <body>
 <div class="shell">
 
-<!-- ── TOPBAR ── -->
+<!-- TOPBAR -->
 <header class="topbar">
   <div class="logo">⬡ Oil Intel</div>
-
-  <!-- TradingView Ticker Tape — live streaming Brent & WTI -->
   <div class="ticker-wrap">
     <div class="tradingview-widget-container" style="width:100%;height:44px;">
       <div class="tradingview-widget-container__widget"></div>
       <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-      {
-        "symbols": [
-          {"proName": "ICEUS:BRN1!", "title": "Brent Crude"},
-          {"proName": "NYMEX:CL1!",  "title": "WTI Crude"},
-          {"proName": "NYMEX:NG1!",  "title": "Nat Gas"},
-          {"proName": "NYMEX:HO1!",  "title": "Heating Oil"},
-          {"proName": "NYMEX:RB1!",  "title": "RBOB Gasoline"}
-        ],
-        "showSymbolLogo": false,
-        "isTransparent": true,
-        "displayMode": "compact",
-        "colorTheme": "dark",
-        "locale": "en"
-      }
+      {"symbols":[{"proName":"ICEUS:BRN1!","title":"Brent Crude"},{"proName":"NYMEX:CL1!","title":"WTI Crude"},{"proName":"NYMEX:NG1!","title":"Nat Gas"},{"proName":"NYMEX:HO1!","title":"Heating Oil"},{"proName":"NYMEX:RB1!","title":"RBOB Gasoline"}],"showSymbolLogo":false,"isTransparent":true,"displayMode":"compact","colorTheme":"dark","locale":"en"}
       </script>
     </div>
   </div>
-
   <div class="topbar-right">
     <span class="live-pill"><span class="pulse"></span>Live</span>
     <span class="date-lbl" id="dateLbl"></span>
   </div>
 </header>
 
-<!-- ── SIDEBAR ── -->
+<!-- SIDEBAR -->
 <aside class="sidebar">
   <span class="slabel">Live Prices</span>
-
   <div class="war-banner">
     <strong>⚠ Major Supply Disruption</strong>
-    US–Israel–Iran war. Strait of Hormuz largely shut. ~20 mb/d at risk. Largest oil supply shock on record per IEA.
+    US–Israel–Iran war. Hormuz near-shut. UAE energy assets struck. Brent ~$102 — Citi sees $110–$150+ risk.
   </div>
-
-  <!-- Brent live widget -->
   <div class="pcard">
-    <div class="pcard-title">Brent Crude — BRN1! <span>● Live</span></div>
-    <div class="tradingview-widget-container">
-      <div class="tradingview-widget-container__widget"></div>
+    <div class="pcard-title">Brent Crude — BRN1! <span class="pcard-live">● Live</span></div>
+    <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
       <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
-      {
-        "symbol": "ICEUS:BRN1!",
-        "width": "100%",
-        "height": 60,
-        "colorTheme": "dark",
-        "isTransparent": true,
-        "locale": "en"
-      }
+      {"symbol":"ICEUS:BRN1!","width":"100%","height":60,"colorTheme":"dark","isTransparent":true,"locale":"en"}
       </script>
     </div>
   </div>
-
-  <!-- WTI live widget -->
   <div class="pcard">
-    <div class="pcard-title">WTI Crude — CL1! <span>● Live</span></div>
-    <div class="tradingview-widget-container">
-      <div class="tradingview-widget-container__widget"></div>
+    <div class="pcard-title">WTI Crude — CL1! <span class="pcard-live">● Live</span></div>
+    <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
       <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
-      {
-        "symbol": "NYMEX:CL1!",
-        "width": "100%",
-        "height": 60,
-        "colorTheme": "dark",
-        "isTransparent": true,
-        "locale": "en"
-      }
+      {"symbol":"NYMEX:CL1!","width":"100%","height":60,"colorTheme":"dark","isTransparent":true,"locale":"en"}
       </script>
     </div>
   </div>
-
-  <!-- Key context -->
   <div class="pcard">
     <div class="pcard-title">Key Context</div>
     <div class="prow"><span class="pname">Brent peak (9 Mar)</span><span class="pval dn">$119.50</span></div>
     <div class="prow"><span class="pname">Pre-war (27 Feb)</span><span class="pval">$72.00</span></div>
     <div class="prow"><span class="pname">Price change</span><span class="pval dn">+44%</span></div>
     <div class="prow"><span class="pname">IEA SPR release</span><span class="pval" style="color:var(--text2);font-size:11px;">400 mb global</span></div>
+    <div class="prow"><span class="pname">Citi base case</span><span class="pval dn">$110–$120</span></div>
     <div class="prow"><span class="pname">52-wk range</span><span class="pval" style="font-size:11px;color:var(--text3);">$72–$119.50</span></div>
   </div>
-
   <span class="slabel">Filter Topics</span>
   <div class="nav-item active" onclick="filterTopic(this,'all')"><span class="ndot" style="background:#e8a840"></span>All news</div>
   <div class="nav-item" onclick="filterTopic(this,'hormuz')"><span class="ndot" style="background:#e05050"></span>Strait of Hormuz</div>
@@ -245,27 +209,24 @@
   <div class="nav-item" onclick="filterTopic(this,'products')"><span class="ndot" style="background:#c090ff"></span>Refined products</div>
   <div class="nav-item" onclick="filterTopic(this,'forecasts')"><span class="ndot" style="background:#ffc840"></span>Bank forecasts</div>
   <div class="nav-item" onclick="filterTopic(this,'geopolitics')"><span class="ndot" style="background:#e8a840"></span>Geopolitics</div>
-
   <span class="slabel">Sources</span>
   <div class="src-chips" id="srcChips"></div>
 </aside>
 
-<!-- ── MAIN FEED ── -->
+<!-- MAIN FEED -->
 <main class="main">
   <div class="feed-header">
     <span class="feed-title">Latest stories — newest first</span>
     <div class="feed-right">
       <span class="story-count" id="storyCount"></span>
-      <button class="refresh-btn" id="rfBtn" onclick="doRefresh()">
-        <span class="rspin">↻</span> Refresh
-      </button>
+      <button class="refresh-btn" id="rfBtn" onclick="doRefresh()"><span class="rspin">↻</span> Refresh</button>
     </div>
   </div>
   <div class="refresh-toast" id="rfToast"></div>
   <div class="news-list" id="newsList"></div>
 </main>
 
-<!-- ── CHAT PANEL ── -->
+<!-- CHAT -->
 <aside class="chat-panel">
   <div class="chat-title">
     <span>AI Market Analyst</span>
@@ -273,17 +234,17 @@
   </div>
   <div class="chat-msgs" id="chatMsgs">
     <div class="cmsg ai">
-      Good morning. Oil markets are in crisis mode — the US–Israel–Iran war has effectively shut the Strait of Hormuz, sending Brent above <strong>$103/bbl</strong> today (+4%), up ~44% since the conflict began on 28 Feb.<br><br>
-      Click any headline for full details and a direct link to the source article. Ask me anything below.
+      Today (18 Mar) Brent is ~<strong>$102/bbl</strong> — a surprise API crude build of 6.56 mb weighed on prices despite escalating UAE attacks. Citi warns of <strong>$110–$120</strong> in their base case, and <strong>$150+</strong> in a severe scenario.<br><br>
+      Click any headline for details and a direct source link. Hit <strong>Refresh</strong> to check for new stories — the AI will merge them intelligently, preserving 📌 pinned articles.
     </div>
   </div>
   <div class="qprompts">
-    <button class="qp" onclick="sq('Why is Brent trading above $100 today?')">Why $100+ Brent?</button>
-    <button class="qp" onclick="sq('What is happening in the Strait of Hormuz?')">Hormuz crisis</button>
-    <button class="qp" onclick="sq('What is the IEA emergency oil release?')">SPR release</button>
-    <button class="qp" onclick="sq('What are Goldman Sachs oil price forecasts for 2026?')">Goldman forecasts</button>
-    <button class="qp" onclick="sq('What refined products are most affected by the Hormuz closure?')">Products impact</button>
-    <button class="qp" onclick="sq('Give me a full oil market morning briefing for today')">Full briefing</button>
+    <button class="qp" onclick="sq('What is driving oil prices today, 18 March 2026?')">Today\'s drivers</button>
+    <button class="qp" onclick="sq('What is the Citi oil price forecast and what scenarios do they see?')">Citi forecast</button>
+    <button class="qp" onclick="sq('What happened to UAE energy infrastructure this week?')">UAE attacks</button>
+    <button class="qp" onclick="sq('What does the API crude inventory build mean for prices?')">API inventory</button>
+    <button class="qp" onclick="sq('What is the EIA short-term energy outlook for 2026?')">EIA outlook</button>
+    <button class="qp" onclick="sq('Give me a full oil market morning briefing for today 18 March 2026')">Full briefing</button>
   </div>
   <div class="chat-input-area">
     <textarea class="chat-input" id="chatInput" rows="2" placeholder="Ask about any oil market topic..."></textarea>
@@ -291,112 +252,110 @@
   </div>
 </aside>
 
-</div><!-- /.shell -->
+</div>
 
 <script>
-// ── CONFIG ──
 const ANTHROPIC_API = "https://api.anthropic.com/v1/messages";
 
-// ── NEWS DATA — curated 12–17 Mar 2026, newest first ──
-const NEWS = [
-  {
-    source:"CNBC", sb:"sb-cnbc", time:"17 Mar · 09:17 GMT", category:"Prices", topic:"prices",
-    sentiment:"bull", sentTip:"Bullish — Hormuz uncertainty drives further price gains",
-    headline:"Oil jumps 4% as doubts linger over US-backed plan to protect Strait of Hormuz shipping",
-    teaser:"Brent crude gained 4% to $103.65/bbl and WTI rose 4.2% to $97.08/bbl as uncertainty persisted over whether a US-led shipping coalition was operational.",
-    body:"'Mixed messages are coming from the Trump administration on the war's duration, as the market focuses more on the actions on the ground that remain escalatory,' said Saul Kavonic, head of energy research at MST Marquee. The Strait of Hormuz handles roughly 13 mb/d of global seaborne crude flows — about 31% of the total. Trump said Monday the coalition was not fully in place, urging other countries to join while expressing frustration at hesitant partners.",
-    url:"https://www.cnbc.com/2026/03/17/oil-prices-wti-brent-hormuz-coalition-shipping-trump.html"
-  },
-  {
-    source:"Reuters", sb:"sb-reuters", time:"17 Mar · 08:23 GMT", category:"Geopolitics", topic:"geopolitics",
-    sentiment:"bull", sentTip:"Bullish — tankers only 'dribbling' through, full reopening uncertain",
-    headline:"Oil tankers 'starting to dribble through' Strait of Hormuz, says White House adviser Hassett",
-    teaser:"Kevin Hassett told CNBC that tankers were beginning to cross the Strait, but cautioned the war should be over 'in weeks not months' before prices normalise.",
-    body:"'Already you're seeing tankers are starting to dribble through the straits, and I think it's a sign of how little Iran has left,' Hassett said. He added that once the conflict ends 'there will be price repercussions for a few weeks as the ships make it to the refineries.' The White House reiterated the war would not hurt the US economy, but oil traders remain sceptical given ongoing Iranian attacks on Gulf energy assets.",
-    url:"https://www.usnews.com/news/top-news/articles/2026-03-17/oil-tankers-starting-to-dribble-through-strait-of-hormuz-says-white-house"
-  },
-  {
-    source:"Bloomberg", sb:"sb-bloomberg", time:"17 Mar · 03:32 GMT", category:"Products", topic:"products",
-    sentiment:"bull", sentTip:"Bullish — product crack spreads surging, diesel above $5",
-    headline:"Goldman says oil's biggest shock to hurt refined products most — diesel, jet fuel worst hit",
-    teaser:"Goldman Sachs analysts warn the Hormuz supply shock will hit diesel and jet fuel harder than crude itself, as medium-heavy crude supplies collapse.",
-    body:"'Prices have rallied much more for many refined products than for crude,' wrote analysts Yulia Zhestkova Grigsby and Daan Struyven. The severe disruption to medium-heavy crude — used to produce diesel and fuel oil — poses acute risk to those markets. US diesel topped $5 a gallon for the first time since 2022. More than 3 mb/d of Middle Eastern refining capacity has already shut due to attacks or storage constraints.",
-    url:"https://www.bloomberg.com/news/articles/2026-03-17/goldman-says-oil-s-biggest-shock-to-hurt-refined-products-most"
-  },
-  {
-    source:"Bloomberg", sb:"sb-bloomberg", time:"17 Mar · 00:16 GMT", category:"Prices", topic:"prices",
-    sentiment:"bull", sentTip:"Bullish — oil rebounds after first decline in nearly a week",
-    headline:"Oil rises after first decline in almost a week; Brent advances toward $102 as Iran attacks UAE gas field",
-    teaser:"Brent advanced toward $102/bbl after losing 2.8% on Monday, while WTI was around $95. Iran struck the Shah gas field in the UAE with drones.",
-    body:"Iran escalated attacks to include energy assets beyond the Strait of Hormuz, striking the Shah natural gas field in the UAE — a major LNG export hub. The move rattled markets already on edge from the near-complete closure of Hormuz. Emergency stock releases from IEA member countries provided only brief downward price pressure before buyers returned.",
-    url:"https://www.bloomberg.com/news/articles/2026-03-16/latest-oil-market-news-and-analysis-for-march-17"
-  },
-  {
-    source:"Bloomberg", sb:"sb-bloomberg", time:"Mar 16", category:"SPR", topic:"spr",
-    sentiment:"neut", sentTip:"Neutral — SPR release partially offsets supply shock but Strait still shut",
-    headline:"Oil fell in volatile Monday trade as emergency US crude supplies signalled — but Strait still shut",
-    teaser:"WTI fell as much as 5.8% before retracing, while Brent briefly dipped below $100, as emergency SPR supply neared.",
-    body:"US benchmark futures fell as much as 5.8% on Monday before recovering to trade around $96/bbl, while Brent briefly dipped below $100. Markets remain on edge — any diplomatic breakthrough or further Iranian attacks will move prices sharply. The IEA said Asian nations have begun releasing emergency oil supplies immediately, while European and American stocks begin flowing by end of March.",
-    url:"https://www.bloomberg.com/news/articles/2026-03-15/latest-oil-market-news-and-analysis-for-march-16"
-  },
-  {
-    source:"CNBC", sb:"sb-cnbc", time:"Mar 15", category:"Prices", topic:"prices",
-    sentiment:"bear", sentTip:"Bearish short-term — SPR release & Monday sell-off weighed on prices",
-    headline:"Oil falls nearly 3% as Trump orders strikes on Kharg Island and US SPR release nears",
-    teaser:"Brent lost 2.84% to close at $100.21/bbl Monday and WTI fell 5.28% to $93.50, as emergency US crude supply became imminent.",
-    body:"US crude had surpassed $100/bbl earlier in the session before a sharp sell-off. The US will release 172 million barrels from its Strategic Petroleum Reserve as part of a broader 400 mb IEA-coordinated action. Despite the sell-off, analysts note SPR draws take ~13 days to reach markets, limiting near-term bearish impact.",
-    url:"https://www.cnbc.com/2026/03/15/oil-prices-today-iran-war.html"
-  },
-  {
-    source:"Al Jazeera", sb:"sb-aljazeera", time:"Mar 15", category:"Hormuz", topic:"hormuz",
-    sentiment:"bull", sentTip:"Bullish — strategic reserves cannot fix Hormuz closure",
-    headline:"Strategic oil release may calm markets but cannot fix Hormuz disruption — experts warn",
-    teaser:"Hundreds of tankers sit idle on both sides of the Strait as Iran's blockade keeps Brent above $100.",
-    body:"The 400 mb IEA reserve release covers only ~4 days of global consumption or ~20 days of normal Hormuz flows. 'The release may soften the shock and calm nerves temporarily, but it will remain limited as long as the freedom of tanker movement through Hormuz remains unresolved.' Brent ended Friday at $103.14/bbl after spiking to nearly $120 earlier in the week. LNG prices have risen ~60% since the war began on Feb 28.",
-    url:"https://www.aljazeera.com/economy/2026/3/15/strategic-oil-release-may-calm-markets-but-cannot-fix-hormuz-disruption"
-  },
-  {
-    source:"IEA", sb:"sb-iea", time:"Mar 14", category:"Supply", topic:"supply",
-    sentiment:"bull", sentTip:"Bullish — IEA confirms largest ever oil supply disruption",
-    headline:"IEA Oil Market Report March 2026: Global supply to plunge 8 mb/d — largest disruption in history",
-    teaser:"The IEA confirmed the Hormuz closure is causing the largest oil supply disruption ever recorded, cutting Gulf output by at least 10 mb/d.",
-    body:"Gulf producers have cut total oil production by at least 10 mb/d as tanker traffic through Hormuz dropped from ~20 mb/d to near zero. The IEA coordinated an emergency release of 400 million barrels from global strategic reserves — the largest such action ever — but warned it is a 'stop-gap measure.' Global oil demand growth for 2026 was revised down by 210 kb/d. Brent traded within a whisker of $120/bbl before easing.",
-    url:"https://www.iea.org/reports/oil-market-report-march-2026"
-  },
-  {
-    source:"TheStreet", sb:"sb-thestreet", time:"Mar 13", category:"Forecasts", topic:"forecasts",
-    sentiment:"bull", sentTip:"Bullish medium-term — Goldman calls $100 a floor, not a ceiling",
-    headline:"Goldman Sachs revamps Brent crude forecast — Q4 2026 base case $71/bbl, $100 is the floor now",
-    teaser:"Goldman raised its Q4 2026 Brent forecast to $71 from $66, and warns that at $100 the bank is 'not describing a ceiling — it is describing a floor.'",
-    body:"Goldman assumes the Strait of Hormuz operates at just 10% of normal flows for 21 days, followed by 30-day gradual recovery. Brent peaked at $119.50/bbl on 9 March. The risk scenario — a two-month disruption — pushes Goldman's Q4 estimate to $93/bbl. The bank describes the current disruption as the largest oil supply shock on record. Barclays says Brent could test $120–$150 if conflict persists.",
-    url:"https://www.thestreet.com/investing/goldman-sachs-revamps-brent-crude-forecast-for-the-rest-of-2026"
-  },
-  {
-    source:"Reuters", sb:"sb-reuters", time:"Mar 12", category:"Forecasts", topic:"forecasts",
-    sentiment:"bull", sentTip:"Bullish — multiple banks raising forecasts on prolonged disruption",
-    headline:"Goldman Sachs raises Q4 Brent forecast to $71/bbl on longer Hormuz disruption",
-    teaser:"Reuters reported Goldman's upgrade alongside multiple bank revisions: HSBC raised its 2026 average Brent to $80 from $65; Barclays sees $120–$150 in a worst-case.",
-    body:"In Goldman's base case, Strait of Hormuz flows start recovering from March 21 onwards. The IEA estimated ~4.2 mb/d can be rerouted via pipeline, leaving up to 16 mb/d at risk if Hormuz stays fully closed. Since the war began on Feb 28, Brent has surged more than 36% and WTI about 39%. Both briefly topped $119 on March 9 — their highest since mid-2022.",
-    url:"https://money.usnews.com/investing/news/articles/2026-03-11/goldman-sachs-raises-q4-brent-wti-crude-price-forecast-amid-longer-hormuz-disruption"
-  }
+// ── NEWS STORE ──
+// pinned:true = never removed on refresh (high-importance reference articles)
+// isNew:true  = added by last refresh, shows NEW badge for 30s then clears
+
+let NEWS = [
+  {id:"cn-180326-1",source:"CNBC",sb:"sb-cnbc",time:"18 Mar · 10:44 ET",category:"Prices",topic:"prices",
+   sentiment:"bear",sentTip:"Bearish intraday — inventory build offsets geopolitical premium",pinned:false,
+   headline:"Oil slips despite UAE energy attacks as API crude inventory build of 6.56 mb weighs on prices",
+   teaser:"Brent fell 1.17% to $102.19/bbl and WTI dropped 1.81% to $94.56, as a surprise 6.56 mb API crude build offset fears from escalating attacks on UAE energy infrastructure.",
+   body:"Market sources citing API data told Reuters that US crude stocks rose 6.56 million barrels in the week ended March 13 — far above the 380,000-barrel build expected. Attacks on the UAE included a drone strike on the world's largest ultra-sour gas facility, a fire at the Fujairah Oil Industry Zone, and damage to a tanker near the Strait. Citi warned the inventory data offers false comfort: in their base case, disruptions over the next 4–6 weeks could remove 11–16 mb/d from the market, pushing Brent to $110–$120. A severe scenario could drive prices to $130 average in Q2–Q3, with spikes to $150 or higher including refined products.",
+   url:"https://www.cnbc.com/2026/03/18/oil-prices-brent-wti-uae-energy-attacks-us-crude-inventories-hormuz.html"},
+  {id:"cn-170326-2",source:"CNBC",sb:"sb-cnbc",time:"17 Mar · close",category:"Prices",topic:"prices",
+   sentiment:"bull",sentTip:"Bullish — NATO hesitancy prolongs Hormuz impasse",pinned:false,
+   headline:"Oil tops $103 as NATO allies refuse to join US tanker escort coalition in Strait of Hormuz",
+   teaser:"Brent gained 3.2% to $103.42/bbl and WTI rose 2.9% to $96.21 as Trump's tanker coalition collapsed amid allied reluctance.",
+   body:"Trump posted on social media that NATO allies were unwilling to participate in the US war against Iran. ING's Warren Patterson said: 'The sheer scale of the oil supply disruption makes it difficult for the market to find an adequate solution.' Ship movements through Hormuz — which handled 13 mb/d of seaborne crude in 2025 — have plunged. Escorting vessels would leave warships vulnerable to Iranian attack, further dampening coalition prospects.",
+   url:"https://www.cnbc.com/2026/03/17/oil-prices-wti-brent-hormuz-coalition-shipping-trump.html"},
+  {id:"bl-170326-1",source:"Bloomberg",sb:"sb-bloomberg",time:"17 Mar · 03:32 GMT",category:"Products",topic:"products",
+   sentiment:"bull",sentTip:"Bullish — product crack spreads surging, diesel above $5",pinned:true,
+   headline:"Goldman: oil's biggest supply shock will hurt refined products most — diesel and jet fuel worst hit",
+   teaser:"Goldman Sachs analysts warn the Hormuz supply shock hits diesel and jet fuel harder than crude, as medium-heavy crude supplies collapse.",
+   body:"'Prices have rallied much more for many refined products than for crude,' wrote analysts Yulia Zhestkova Grigsby and Daan Struyven. The disruption to medium-heavy crude — feedstock for diesel and fuel oil — poses acute risk to those product markets. US diesel topped $5/gal for the first time since 2022. More than 3 mb/d of Middle Eastern refining capacity has already shut due to attacks or storage constraints.",
+   url:"https://www.bloomberg.com/news/articles/2026-03-17/goldman-says-oil-s-biggest-shock-to-hurt-refined-products-most"},
+  {id:"aj-160326-1",source:"Al Jazeera",sb:"sb-aljazeera",time:"16 Mar",category:"Hormuz",topic:"hormuz",
+   sentiment:"bull",sentTip:"Bullish — Brent tops $106 with no end to Hormuz closure",pinned:false,
+   headline:"Brent tops $106 as oil keeps rising with no end in sight to Strait of Hormuz closure",
+   teaser:"Brent hit $106/bbl before easing to $104.63, as Trump's tanker coalition attracted zero public commitments from allies.",
+   body:"Brent rose as much as 3% to top $106 before easing. Trump urged China, Japan, France and the UK to deploy navies to secure the Strait, but none publicly committed. The Strait normally carries about one-fifth of global oil supply — roughly 20 mb/d.",
+   url:"https://www.aljazeera.com/economy/2026/3/16/oil-prices-keep-rising-as-trump-seeks-coalition-to-reopen-strait-of-hormuz"},
+  {id:"cbs-160326-1",source:"CBS News",sb:"sb-cbsnews",time:"16 Mar",category:"Geopolitics",topic:"geopolitics",
+   sentiment:"bull",sentTip:"Bullish — broad Gulf attacks, first tanker dribbles through Hormuz",pinned:false,
+   headline:"Iran attacks Saudi, UAE, Qatar and Bahrain energy targets; first non-Iranian tanker transits Hormuz",
+   teaser:"Saudi Arabia intercepted 35 Iranian drones targeting eastern region oil installations. One Aframax tanker carrying Abu Dhabi crude became the first to transit Hormuz with AIS on.",
+   body:"The UAE Fujairah Oil Industry Zone was struck, fires reported near Dubai airport, Shah gas field remained suspended. Saudi Arabia intercepted 35 drones headed for its oil-rich eastern region. Kuwait airport was targeted. The MarineTraffic-confirmed Aframax transit was the first non-Iranian cargo to cross Hormuz broadcasting its AIS signal. Trump said oil would 'drop like a rock as soon as it's over.'",
+   url:"https://www.cbsnews.com/live-updates/iran-war-oil-prices-strait-of-hormuz-trump-threat-kharg-island/"},
+  {id:"cn-150326-1",source:"CNBC",sb:"sb-cnbc",time:"15 Mar · close",category:"Prices",topic:"prices",
+   sentiment:"bear",sentTip:"Bearish short-term — SPR release and sell-off",pinned:false,
+   headline:"Oil falls 3% as Trump orders Kharg Island strikes and US SPR release nears",
+   teaser:"Brent lost 2.84% to $100.21/bbl and WTI fell 5.28% to $93.50, as emergency crude supplies became imminent.",
+   body:"US crude surpassed $100 earlier before a sharp sell-off on SPR news. The US will release 172 mb from its SPR as part of the 400 mb IEA action — the largest in history. SPR draws take ~13 days to reach markets, limiting near-term bearish impact. Treasury Secretary Bessent confirmed no authority to intervene directly in oil commodity markets.",
+   url:"https://www.cnbc.com/2026/03/15/oil-prices-today-iran-war.html"},
+  {id:"aj-150326-1",source:"Al Jazeera",sb:"sb-aljazeera",time:"15 Mar",category:"SPR",topic:"spr",
+   sentiment:"bull",sentTip:"Bullish — SPR is a stop-gap; structural Hormuz problem remains",pinned:true,
+   headline:"Strategic oil release may calm markets but cannot fix Hormuz disruption — experts warn",
+   teaser:"The 400 mb IEA release covers only ~4 days of global consumption — a stop-gap, not a solution to the structural Hormuz closure.",
+   body:"'The release may soften the shock and calm nerves temporarily, but it will remain limited as long as the freedom of tanker movement through Hormuz remains unresolved,' said Aldandeni. The IEA release covers only ~20 days of normal Hormuz flows. Brent ended Friday at $103.14/bbl after spiking to nearly $120. LNG prices have risen ~60% since the war began on Feb 28.",
+   url:"https://www.aljazeera.com/economy/2026/3/15/strategic-oil-release-may-calm-markets-but-cannot-fix-hormuz-disruption"},
+  {id:"iea-140326-1",source:"IEA",sb:"sb-iea",time:"14 Mar",category:"Supply",topic:"supply",
+   sentiment:"bull",sentTip:"Bullish — largest oil supply disruption in recorded history",pinned:true,
+   headline:"IEA March 2026 Oil Market Report: Supply to plunge 8 mb/d — largest disruption in history",
+   teaser:"Gulf output cut by at least 10 mb/d. Tanker traffic through Hormuz has plunged from ~20 mb/d to near zero. 400 mb emergency release is a stop-gap measure.",
+   body:"Crude production is currently curtailed by at least 8 mb/d, with a further 2 mb/d of condensates and NGLs shut in. Major supply reductions in Iraq, Qatar, Kuwait, UAE and Saudi Arabia. Over 4 mb/d of refining capacity at risk. Flight cancellations across the Middle East have materially reduced global jet fuel demand. Global oil demand growth for 2026 revised down by 210 kb/d to 640 kb/d. Observed global inventories are at their highest since February 2021.",
+   url:"https://www.iea.org/reports/oil-market-report-march-2026"},
+  {id:"cn-130326-1",source:"CNBC",sb:"sb-cnbc",time:"13 Mar · close",category:"Prices",topic:"prices",
+   sentiment:"bull",sentTip:"Bullish — second straight close above $100",pinned:false,
+   headline:"Brent closes above $100 for second day as Iran's new supreme leader vows to keep fighting",
+   teaser:"Brent rose 2.67% to $103.14/bbl for a second consecutive close above $100 — the biggest two-week oil price surge since COVID-19.",
+   body:"Oil notched its second week of gains (~10%) following the prior week's 27.9% surge. EnQuest CEO Bseisu told CNBC the market 'has never seen something of this magnitude before — every day of delay means another 20 million barrels wiped from the market.' Axios reported Trump had told G7 leaders Iran was 'about to surrender' — Iran's new supreme leader Mojtaba Khamenei immediately denied it. Deutsche Bank warned investors are 'increasingly pricing in a more protracted conflict.'",
+   url:"https://www.cnbc.com/2026/03/13/oil-100-price-brent-wti-trump-iran-war-surrender-khamenei.html"},
+  {id:"eia-100326-1",source:"EIA",sb:"sb-eia",time:"10 Mar",category:"Forecasts",topic:"forecasts",
+   sentiment:"neut",sentTip:"Neutral — EIA forecasts near-term strength then $70 by year-end if conflict resolves",pinned:true,
+   headline:"EIA Short-Term Energy Outlook: Brent above $95 through May, then falling to ~$70 by end-2026",
+   teaser:"The EIA forecasts Brent will stay above $95/bbl through May before falling below $80 in Q3 and to ~$70 by year-end — conditional on gradual Hormuz recovery.",
+   body:"The EIA assumes the effective Hormuz closure will cause Middle East production to fall further, then gradually ease as transit resumes. US crude production forecast at 13.6 mb/d in 2026, rising to 13.8 mb/d in 2027, as higher prices incentivise more output. Henry Hub gas forecast at $3.80/MMBtu in 2026 — 13% lower than prior forecast due to milder February temperatures. The entire price forecast is highly dependent on conflict duration.",
+   url:"https://www.eia.gov/outlooks/steo/"}
 ];
 
-const SOURCES = ["CNBC","Bloomberg","Reuters","IEA","Al Jazeera","TheStreet"];
-let activeSrcs = new Set(SOURCES);
+// ── STATE ──
+let activeSrcs = new Set(NEWS.map(n => n.source));
 let activeTopic = "all";
 let chatHistory = [];
 
-const SYSTEM = `You are a senior oil market analyst. Today is 17 March 2026. CRITICAL MARKET CONTEXT: The US and Israel launched joint strikes on Iran on 28 February 2026, triggering the largest oil supply disruption in recorded history. The Strait of Hormuz is nearly shut — tankers are only 'dribbling through.' Brent crude is trading at ~$103.65/bbl (+4% today), up ~44% from $72/bbl before the war. WTI is at $97.08/bbl. Brent peaked at $119.50/bbl on 9 March. The IEA confirmed supply is down ~8 mb/d in March. Gulf producers have cut ~10 mb/d. The IEA coordinated a 400 mb emergency reserve release (largest ever). Goldman Sachs calls $100/bbl a floor not a ceiling. Refined products (diesel, jet fuel) are hit harder than crude. The White House says the war will be over 'in weeks not months.' Iran has been striking Gulf energy assets including UAE's Shah gas field. Be concise, authoritative, cite specific sources and data points. Use market terminology.`;
+const SYSTEM = `You are a senior oil market analyst embedded in a live oil market intelligence terminal. Today is 18 March 2026.
 
-const sentCls = { bull:"sent-bull", bear:"sent-bear", neut:"sent-neut" };
-const sentLbl = { bull:"▲", bear:"▼", neut:"●" };
+CURRENT MARKET CONTEXT:
+- Brent: ~$102.19/bbl (-1.17% today). WTI: ~$94.56/bbl (-1.81%)
+- Brent peak $119.50 on 9 Mar; pre-war $72 on 27 Feb (+44% since war)
+- US-Israel-Iran war ongoing since 28 Feb 2026; Strait of Hormuz near-shut
+- Surprise API crude build of 6.56 mb weighed on prices today despite UAE attacks
+- IEA: largest supply disruption in oil market history; Gulf output cut ~10 mb/d
+- IEA released 400 mb from emergency reserves (largest ever) — a stop-gap
+- Citi base case: $110–$120 Brent if disruption lasts 4–6 weeks; severe: $130 avg, spikes to $150+
+- UAE energy infrastructure attacked: Fujairah, Shah gas field, Dubai airport area
+- Iran's new supreme leader Mojtaba Khamenei vows Hormuz stays shut
+- NATO allies refuse US tanker escort coalition
+- EIA forecasts Brent above $95 near-term, then ~$70 by year-end if conflict resolves
+- Goldman: diesel and jet fuel hit harder than crude; diesel >$5/gal in US
+Be concise, authoritative, market-focused. Cite specific data and sources.`;
 
-// ── INIT ──
+const sentCls = {bull:"sent-bull",bear:"sent-bear",neut:"sent-neut"};
+const sentLbl = {bull:"▲",bear:"▼",neut:"●"};
+
 document.getElementById("dateLbl").textContent =
   new Date().toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short",year:"numeric"});
 
 function initSourceChips() {
-  document.getElementById("srcChips").innerHTML = SOURCES.map(s =>
+  const sources = [...new Set(NEWS.map(n => n.source))];
+  activeSrcs = new Set(sources);
+  document.getElementById("srcChips").innerHTML = sources.map(s =>
     `<button class="src-chip on" onclick="toggleSrc(this,'${s}')">${s}</button>`
   ).join("");
 }
@@ -425,23 +384,24 @@ function renderFeed() {
     list.innerHTML = `<div style="padding:40px 18px;color:var(--text3);text-align:center;font-size:13px;">No stories match the current filters.</div>`;
     return;
   }
-  list.innerHTML = filtered.map((n, i) => `
-    <div class="ncard" id="nc${i}" onclick="expandCard(this)">
+  list.innerHTML = filtered.map(n => `
+    <div class="ncard${n.isNew ? ' new-article' : ''}" id="nc-${n.id}" onclick="expandCard(this)">
       <div class="nmeta">
         <span class="sbadge ${n.sb}">${n.source}</span>
         <span class="ntime">${n.time}</span>
         <span class="ncat">${n.category}</span>
         <span class="sent ${sentCls[n.sentiment]}" title="${n.sentTip}">${sentLbl[n.sentiment]}</span>
+        ${n.isNew ? '<span class="new-badge">New</span>' : ''}
+        ${n.pinned ? '<span class="pin-icon" title="Pinned — preserved on refresh">📌</span>' : ''}
       </div>
       <div class="nheadline">${n.headline}</div>
       <div class="nteaser">${n.teaser}</div>
       <div class="nbody">${n.body}</div>
       <div class="nfooter">
         <a class="read-link" href="${n.url}" target="_blank" rel="noopener">Read full article at ${n.source} ↗</a>
-        <button class="ask-btn" onclick="event.stopPropagation();sq('Give me deeper analysis on: ${n.headline.replace(/'/g,"\\'").replace(/"/g,'\\"')}')">Ask analyst ↗</button>
+        <button class="ask-btn" onclick="event.stopPropagation();sq('Deeper analysis: ${n.headline.replace(/'/g,"\\'").replace(/"/g,'\\"')}')">Ask analyst ↗</button>
       </div>
-    </div>
-  `).join("");
+    </div>`).join("");
 }
 
 function expandCard(el) {
@@ -450,26 +410,123 @@ function expandCard(el) {
   if (!was) el.classList.add("expanded");
 }
 
-function doRefresh() {
+// ── SMART REFRESH via Claude ──
+async function doRefresh() {
   const btn = document.getElementById("rfBtn");
   const toast = document.getElementById("rfToast");
   btn.disabled = true;
   btn.classList.add("spinning");
-  toast.textContent = "Refreshing…";
-  setTimeout(() => {
+  toast.className = "refresh-toast";
+  toast.textContent = "Asking AI for new stories…";
+
+  const today = new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  const existingSummary = NEWS.map(n =>
+    `ID:${n.id} | ${n.time} | ${n.source} | pinned:${n.pinned} | "${n.headline}"`
+  ).join("\n");
+
+  const prompt = `You are updating an oil market news feed. Today is ${today}.
+
+CURRENT ARTICLES IN FEED:
+${existingSummary}
+
+YOUR TASK — respond with ONLY valid JSON, no preamble, no markdown fences:
+1. Identify 0–3 genuinely new oil market stories not already covered above
+2. Suggest which non-pinned articles (if any) to remove as superseded — never remove pinned ones
+3. Keep total articles at 10–12 maximum
+
+JSON format (return this exact structure):
+{
+  "newArticles": [
+    {
+      "id": "short-unique-slug",
+      "source": "CNBC",
+      "sb": "sb-cnbc",
+      "time": "18 Mar",
+      "category": "Prices",
+      "topic": "prices",
+      "sentiment": "bull",
+      "sentTip": "One line reason for bull/bear/neut",
+      "pinned": false,
+      "headline": "Full precise headline",
+      "teaser": "One sentence teaser with key numbers.",
+      "body": "Two to three sentences with specific data points and quotes.",
+      "url": "https://real-direct-article-url.com/specific-path"
+    }
+  ],
+  "removeIds": [],
+  "summary": "One sentence summary of what changed."
+}
+
+Rules:
+- Only add articles with genuinely new market-moving developments
+- If nothing materially new, return empty newArticles array — this is fine and expected
+- Valid sb values: sb-reuters, sb-bloomberg, sb-cnbc, sb-ft, sb-iea, sb-eia, sb-aljazeera, sb-thestreet, sb-cnn, sb-cbsnews
+- Valid topics: prices, hormuz, supply, spr, products, forecasts, geopolitics
+- Valid sentiments: bull, bear, neut
+- URLs must be real, specific article URLs — not homepages`;
+
+  try {
+    const res = await fetch(ANTHROPIC_API, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({
+        model:"claude-sonnet-4-20250514",
+        max_tokens:1200,
+        messages:[{role:"user", content:prompt}]
+      })
+    });
+    const data = await res.json();
+    const raw = data.content?.map(b => b.text||"").join("").trim() || "";
+
+    // Robustly extract JSON
+    const jsonMatch = raw.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error("No JSON returned");
+    const result = JSON.parse(jsonMatch[0]);
+    const t = new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});
+
+    // Remove displaced non-pinned articles
+    if (result.removeIds?.length) {
+      NEWS = NEWS.filter(n => n.pinned || !result.removeIds.includes(n.id));
+    }
+
+    // Add new articles
+    let added = 0;
+    const existingIds = new Set(NEWS.map(n => n.id));
+    (result.newArticles || []).forEach(article => {
+      if (!existingIds.has(article.id)) {
+        article.isNew = true;
+        NEWS.unshift(article);
+        added++;
+      }
+    });
+
+    // Clear NEW badge after 30s
+    if (added > 0) {
+      setTimeout(() => { NEWS.forEach(n => { n.isNew = false; }); renderFeed(); }, 30000);
+    }
+
+    initSourceChips();
+    renderFeed();
     btn.disabled = false;
     btn.classList.remove("spinning");
-    renderFeed();
-    const t = new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});
-    toast.textContent = `✓ Layout refreshed at ${t} GMT — prices update live via TradingView`;
-    setTimeout(() => { toast.textContent = ""; }, 5000);
-    const bulls = NEWS.filter(n=>n.sentiment==="bull").length;
-    const bears = NEWS.filter(n=>n.sentiment==="bear").length;
-    const neuts = NEWS.filter(n=>n.sentiment==="neut").length;
-    addMsg("ai", `Refreshed at ${t} GMT. TradingView price widgets reload automatically.<br>
-      ${NEWS.length} curated stories — <span style="color:#3db870">▲ ${bulls} bullish</span> · <span style="color:#e05050">▼ ${bears} bearish</span> · <span style="color:#8a9099">● ${neuts} neutral</span><br>
-      <span style="color:var(--text3);font-size:12px;">Articles are snapshots from 12–17 Mar 2026. Ask me for the latest news and I'll search and update the file.</span>`);
-  }, 800);
+
+    if (added > 0) {
+      toast.textContent = `✓ ${added} new stor${added>1?'ies':'y'} added at ${t} GMT`;
+      addMsg("ai", `Feed updated at ${t} GMT — <strong>${added} new article${added>1?'s':''}</strong> added${result.removeIds?.length ? `, ${result.removeIds.length} older article${result.removeIds.length>1?'s':''} removed` : ''}.<br><em style="color:var(--text3);font-size:12px;">${result.summary||''}</em>`);
+    } else {
+      toast.textContent = `✓ Checked at ${t} GMT — feed is up to date`;
+      addMsg("ai", `Checked for new stories at ${t} GMT. ${result.summary || 'No significant new developments — the current feed reflects the latest market picture.'}`);
+    }
+    setTimeout(() => { toast.textContent = ""; }, 7000);
+
+  } catch(e) {
+    btn.disabled = false;
+    btn.classList.remove("spinning");
+    toast.className = "refresh-toast red";
+    toast.textContent = "Refresh error — check connection";
+    setTimeout(() => { toast.textContent = ""; toast.className = "refresh-toast"; }, 5000);
+    addMsg("ai", "Could not refresh the feed — network error or API unavailable. Existing articles are unchanged. Try again shortly.");
+  }
 }
 
 // ── CHAT ──
@@ -478,8 +535,7 @@ function addMsg(role, html) {
   const d = document.createElement("div");
   d.className = "cmsg " + role;
   d.innerHTML = html;
-  c.appendChild(d);
-  c.scrollTop = c.scrollHeight;
+  c.appendChild(d); c.scrollTop = c.scrollHeight;
 }
 
 function showTyping() {
@@ -490,37 +546,34 @@ function showTyping() {
   c.appendChild(t); c.scrollTop = c.scrollHeight;
 }
 
-function removeTyping() {
-  const t = document.getElementById("typInd");
-  if (t) t.remove();
-}
+function removeTyping() { const t=document.getElementById("typInd"); if(t) t.remove(); }
 
 async function callClaude(userMsg) {
-  chatHistory.push({ role:"user", content: userMsg });
+  chatHistory.push({role:"user",content:userMsg});
   showTyping();
   try {
     const res = await fetch(ANTHROPIC_API, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
       body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 900,
-        system: SYSTEM,
-        messages: chatHistory
+        model:"claude-sonnet-4-20250514",
+        max_tokens:900,
+        system:SYSTEM,
+        messages:chatHistory
       })
     });
     const data = await res.json();
     removeTyping();
-    const reply = data.content?.map(b => b.text || "").join("") || "Unable to retrieve a response. Please try again.";
-    chatHistory.push({ role:"assistant", content: reply });
-    addMsg("ai", reply.replace(/\n/g, "<br>"));
+    const reply = data.content?.map(b=>b.text||"").join("") || "Unable to retrieve a response.";
+    chatHistory.push({role:"assistant",content:reply});
+    addMsg("ai", reply.replace(/\n/g,"<br>"));
   } catch(e) {
     removeTyping();
-    addMsg("ai", "Network error — please check your connection and try again.");
+    addMsg("ai","Network error — please check your connection and try again.");
   }
 }
 
-function sq(q) { addMsg("user", q); callClaude(q); }
+function sq(q) { addMsg("user",q); callClaude(q); }
 
 function sendChat() {
   const inp = document.getElementById("chatInput");
@@ -531,15 +584,13 @@ function sendChat() {
 }
 
 document.getElementById("chatInput").addEventListener("keydown", e => {
-  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendChat(); }
+  if (e.key==="Enter" && !e.shiftKey) { e.preventDefault(); sendChat(); }
 });
 
-// ── PWA: register service worker ──
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/sw.js").catch(() => {});
+  navigator.serviceWorker.register("sw.js").catch(()=>{});
 }
 
-// ── BOOT ──
 initSourceChips();
 renderFeed();
 </script>
