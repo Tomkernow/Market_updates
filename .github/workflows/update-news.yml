@@ -1,0 +1,105 @@
+name: Update Oil Market News
+
+on:
+  schedule:
+    - cron: '0 6,10,14,18 * * *'   # runs at 06:00, 10:00, 14:00, 18:00 UTC daily
+  workflow_dispatch:                  # also lets you trigger it manually from GitHub
+
+jobs:
+  update-news:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Generate news.json via Claude
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python3 << 'PYEOF'
+          import urllib.request, json, os, datetime
+
+          api_key = os.environ["ANTHROPIC_API_KEY"]
+          today   = datetime.datetime.utcnow().strftime("%d %B %Y, %H:%M UTC")
+
+          prompt = f"""Today is {today}. You are an oil market analyst updating a live news feed.
+
+Return the 8-10 most important current oil market stories you know about.
+Focus on: crude price moves, OPEC+ decisions, supply disruptions, geopolitical risk,
+inventory data (EIA/API), bank forecasts, refinery margins, LNG/products.
+
+Return ONLY a valid JSON array. No preamble, no markdown fences, nothing else.
+Each item must have exactly these fields:
+
+[
+  {{
+    "id": "unique-slug-no-spaces",
+    "source": "Reuters",
+    "sb": "sb-reuters",
+    "time": "18 Mar",
+    "cat": "Prices",
+    "topic": "prices",
+    "sent": "bull",
+    "sentTip": "One line reason why bull/bear/neut",
+    "hl": "Full precise headline",
+    "teaser": "One sentence teaser with key numbers.",
+    "body": "Two to three sentences with specific data points and quotes.",
+    "url": "https://real-direct-article-url.com/specific-path"
+  }}
+]
+
+Valid sb values: sb-reuters sb-bloomberg sb-cnbc sb-ft sb-iea sb-eia sb-aljazeera sb-thestreet sb-cbsnews
+Valid topics: prices hormuz supply spr products forecasts geopolitics opec
+Valid sent: bull bear neut
+Sort newest first. Use real specific article URLs not homepages."""
+
+          body = json.dumps({
+            "model": "claude-sonnet-4-20250514",
+            "max_tokens": 2000,
+            "messages": [{"role": "user", "content": prompt}]
+          }).encode()
+
+          req = urllib.request.Request(
+            "https://api.anthropic.com/v1/messages",
+            data=body,
+            headers={
+              "Content-Type": "application/json",
+              "x-api-key": api_key,
+              "anthropic-version": "2023-06-01"
+            }
+          )
+
+          with urllib.request.urlopen(req) as resp:
+            data = json.loads(resp.read())
+
+          raw = data["content"][0]["text"].strip()
+
+          # Robustly extract the JSON array
+          start = raw.find("[")
+          end   = raw.rfind("]") + 1
+          if start == -1 or end == 0:
+            raise ValueError("No JSON array found in response")
+
+          articles = json.loads(raw[start:end])
+
+          output = {
+            "updated": today,
+            "articles": articles
+          }
+
+          with open("news.json", "w") as f:
+            json.dump(output, f, indent=2)
+
+          print(f"Written {len(articles)} articles to news.json")
+          PYEOF
+
+      - name: Commit updated news.json
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add news.json
+          git diff --staged --quiet || git commit -m "auto: update oil market news $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push
