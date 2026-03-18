@@ -4,7 +4,6 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Oil Market Intelligence</title>
-<meta name="description" content="Live oil market news, prices and AI analyst"/>
 <meta name="theme-color" content="#0c0e10"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -15,33 +14,30 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#0c0e10;--bg2:#141618;--bg3:#1c1f22;
-  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+  --border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.14);
   --text:#e8eaec;--text2:#8a9099;--text3:#5a6068;
   --accent:#e8a840;--accent2:#b07818;
   --green:#3db870;--red:#e05050;--blue:#4a9edd;
-  --font:system-ui,'Segoe UI',sans-serif;
-  --mono:'Courier New',monospace;
+  --font:system-ui,'Segoe UI',sans-serif;--mono:'Courier New',monospace;
 }
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.6;overflow:hidden}
 .shell{display:grid;grid-template-rows:52px 1fr;grid-template-columns:250px 1fr 310px;height:100vh}
 
-/* TOPBAR */
 .topbar{grid-column:1/-1;display:flex;align-items:center;gap:16px;padding:0 16px;border-bottom:1px solid var(--border);background:var(--bg2);overflow:hidden}
 .logo{font-family:var(--mono);font-size:11px;font-weight:bold;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;flex-shrink:0}
 .ticker-wrap{flex:1;overflow:hidden;height:52px;display:flex;align-items:center;min-width:0}
 .topbar-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.live-pill{display:flex;align-items:center;gap:5px;font-size:11px;padding:3px 8px;border-radius:99px;border:1px solid rgba(61,184,112,.3);color:var(--green);background:rgba(61,184,112,.08);white-space:nowrap}
+.live-pill{display:flex;align-items:center;gap:5px;font-size:11px;padding:3px 8px;border-radius:99px;border:1px solid rgba(61,184,112,.3);color:var(--green);background:rgba(61,184,112,.08)}
 .pulse{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.8s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 .date-lbl{font-size:11px;color:var(--text3);font-family:var(--mono);white-space:nowrap}
 
-/* SIDEBAR */
 .sidebar{border-right:1px solid var(--border);background:var(--bg2);overflow-y:auto;padding:12px 0}
 .sidebar::-webkit-scrollbar{width:3px}
 .sidebar::-webkit-scrollbar-thumb{background:var(--border2)}
 .slabel{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);padding:0 14px 6px;margin-top:10px;display:block}
 .pcard{margin:4px 10px 8px;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:7px}
-.pcard-title{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
+.pcard-title{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:6px;display:flex;justify-content:space-between}
 .pcard-live{font-weight:400;letter-spacing:0;text-transform:none;color:var(--green);font-size:9px}
 .prow{display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid var(--border);font-size:12px}
 .prow:last-child{border-bottom:none}
@@ -58,7 +54,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .src-chip{font-size:11px;padding:2px 7px;border-radius:4px;cursor:pointer;border:1px solid var(--border2);color:var(--text2);background:transparent;transition:opacity .12s}
 .src-chip.off{opacity:.28}
 
-/* MAIN */
 .main{overflow-y:auto;display:flex;flex-direction:column}
 .main::-webkit-scrollbar{width:3px}
 .main::-webkit-scrollbar-thumb{background:var(--border)}
@@ -66,6 +61,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .feed-title{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);font-family:var(--mono)}
 .feed-right{display:flex;align-items:center;gap:10px}
 .story-count{font-size:11px;color:var(--text3);font-family:var(--mono)}
+.updated-lbl{font-size:10px;color:var(--text3);font-family:var(--mono)}
 .refresh-btn{display:flex;align-items:center;gap:5px;font-size:12px;padding:4px 11px;border-radius:5px;border:1px solid var(--border2);color:var(--text2);background:transparent;cursor:pointer;font-family:var(--font);white-space:nowrap;transition:all .14s}
 .refresh-btn:hover{border-color:var(--accent2);color:var(--accent)}
 .refresh-btn:disabled{opacity:.4;cursor:not-allowed}
@@ -74,10 +70,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 @keyframes rot{to{transform:rotate(360deg)}}
 .news-list{flex:1}
 
-/* CARDS */
 .ncard{border-bottom:1px solid var(--border);padding:14px 18px;cursor:pointer;transition:background .1s}
 .ncard:hover{background:var(--bg2)}
 .ncard.expanded{background:var(--bg2)}
+.ncard.fresh{animation:flashIn 1.5s ease-out}
+@keyframes flashIn{0%{background:rgba(232,168,64,.12)}100%{background:transparent}}
+.new-badge{display:inline-block;font-size:9px;font-weight:700;text-transform:uppercase;padding:1px 5px;border-radius:3px;background:rgba(232,168,64,.2);color:var(--accent);border:1px solid rgba(232,168,64,.3);margin-left:4px;vertical-align:middle}
 .nmeta{display:flex;align-items:center;gap:7px;margin-bottom:5px;flex-wrap:wrap}
 .sbadge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;text-transform:uppercase;letter-spacing:.04em}
 .sb-reuters{background:rgba(255,120,0,.15);color:#ff9040}
@@ -96,8 +94,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .sent-bear{background:rgba(224,80,80,.18);color:#e05050;border:1px solid rgba(224,80,80,.3)}
 .sent-neut{background:rgba(90,96,104,.18);color:#8a9099;border:1px solid rgba(90,96,104,.25)}
 .nheadline{font-size:14px;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:3px}
-.nteaser{font-size:13px;color:var(--text2);line-height:1.5;display:none;margin-top:5px}
-.nbody{font-size:13px;color:var(--text2);line-height:1.6;display:none;margin-top:8px}
+.nteaser,.nbody{font-size:13px;color:var(--text2);line-height:1.5;display:none;margin-top:5px}
+.nbody{line-height:1.6;margin-top:8px}
 .nfooter{display:none;margin-top:10px;align-items:center;gap:10px;flex-wrap:wrap}
 .ncard.expanded .nteaser,.ncard.expanded .nbody{display:block}
 .ncard.expanded .nfooter{display:flex}
@@ -106,7 +104,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .ask-btn{font-size:12px;color:var(--accent2);border:1px solid rgba(176,120,24,.3);padding:4px 10px;border-radius:4px;cursor:pointer;background:transparent;font-family:var(--font);transition:background .12s}
 .ask-btn:hover{background:rgba(232,168,64,.08)}
 
-/* CHAT */
 .chat-panel{border-left:1px solid var(--border);display:flex;flex-direction:column;background:var(--bg2);overflow:hidden}
 .chat-title{padding:12px 14px;border-bottom:1px solid var(--border);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .chat-tag{font-family:var(--mono);font-size:10px;color:var(--text3);padding:2px 6px;border:1px solid var(--border);border-radius:3px}
@@ -141,13 +138,27 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 <body>
 <div class="shell">
 
+<!-- TOPBAR: single TradingView ticker tape, correct Brent symbol ICEEUR:BRN1! -->
 <header class="topbar">
-  <div class="logo">⬡ Oil Intel</div>
+  <div class="logo">&#9411; Oil Intel</div>
   <div class="ticker-wrap">
-    <div class="tradingview-widget-container" style="width:100%;height:44px;">
+    <div class="tradingview-widget-container" style="width:100%;height:46px;">
       <div class="tradingview-widget-container__widget"></div>
       <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-      {"symbols":[{"proName":"ICEUS:BRN1!","title":"Brent"},{"proName":"NYMEX:CL1!","title":"WTI"},{"proName":"NYMEX:NG1!","title":"Nat Gas"},{"proName":"NYMEX:HO1!","title":"Heating Oil"},{"proName":"NYMEX:RB1!","title":"RBOB"}],"showSymbolLogo":false,"isTransparent":true,"displayMode":"compact","colorTheme":"dark","locale":"en"}
+      {
+        "symbols": [
+          {"proName":"ICEEUR:BRN1!","title":"Brent Crude"},
+          {"proName":"NYMEX:CL1!","title":"WTI Crude"},
+          {"proName":"NYMEX:NG1!","title":"Nat Gas"},
+          {"proName":"NYMEX:HO1!","title":"Heating Oil"},
+          {"proName":"NYMEX:RB1!","title":"RBOB Gasoline"}
+        ],
+        "showSymbolLogo": false,
+        "isTransparent": true,
+        "displayMode": "compact",
+        "colorTheme": "dark",
+        "locale": "en"
+      }
       </script>
     </div>
   </div>
@@ -157,21 +168,26 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
   </div>
 </header>
 
+<!-- SIDEBAR -->
 <aside class="sidebar">
   <span class="slabel">Live Prices</span>
   <div class="war-banner">
-    <strong>&#9888; Major Supply Disruption</strong>
-    US&#8211;Israel&#8211;Iran war. Hormuz near-shut. UAE energy assets struck. Citi sees $110&#8211;$150+ risk.
+    <strong>&#9888; Active Disruption</strong>
+    US&#8211;Israel&#8211;Iran war. Hormuz near-shut. Citi sees $110&#8211;$150+ risk.
   </div>
+
+  <!-- Brent: correct symbol ICEEUR:BRN1! -->
   <div class="pcard">
     <div class="pcard-title">Brent Crude &#8212; BRN1! <span class="pcard-live">&#9679; Live</span></div>
     <div class="tradingview-widget-container">
       <div class="tradingview-widget-container__widget"></div>
       <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
-      {"symbol":"ICEUS:BRN1!","width":"100%","height":60,"colorTheme":"dark","isTransparent":true,"locale":"en"}
+      {"symbol":"ICEEUR:BRN1!","width":"100%","height":60,"colorTheme":"dark","isTransparent":true,"locale":"en"}
       </script>
     </div>
   </div>
+
+  <!-- WTI -->
   <div class="pcard">
     <div class="pcard-title">WTI Crude &#8212; CL1! <span class="pcard-live">&#9679; Live</span></div>
     <div class="tradingview-widget-container">
@@ -181,54 +197,62 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
       </script>
     </div>
   </div>
+
   <div class="pcard">
     <div class="pcard-title">Key Context</div>
     <div class="prow"><span class="pname">Brent peak (9 Mar)</span><span class="pval dn">$119.50</span></div>
     <div class="prow"><span class="pname">Pre-war (27 Feb)</span><span class="pval">$72.00</span></div>
-    <div class="prow"><span class="pname">Price change</span><span class="pval dn">+44%</span></div>
     <div class="prow"><span class="pname">IEA SPR release</span><span class="pval" style="color:var(--text2);font-size:11px;">400 mb global</span></div>
     <div class="prow"><span class="pname">Citi base case</span><span class="pval dn">$110&#8211;$120</span></div>
   </div>
+
   <span class="slabel">Filter Topics</span>
   <div class="nav-item active" onclick="filterTopic(this,'all')"><span class="ndot" style="background:#e8a840"></span>All news</div>
-  <div class="nav-item" onclick="filterTopic(this,'hormuz')"><span class="ndot" style="background:#e05050"></span>Strait of Hormuz</div>
   <div class="nav-item" onclick="filterTopic(this,'prices')"><span class="ndot" style="background:#3db870"></span>Prices &amp; trading</div>
+  <div class="nav-item" onclick="filterTopic(this,'hormuz')"><span class="ndot" style="background:#e05050"></span>Strait of Hormuz</div>
   <div class="nav-item" onclick="filterTopic(this,'supply')"><span class="ndot" style="background:#e05050"></span>Supply disruptions</div>
-  <div class="nav-item" onclick="filterTopic(this,'spr')"><span class="ndot" style="background:#4a9edd"></span>SPR &amp; IEA reserves</div>
+  <div class="nav-item" onclick="filterTopic(this,'opec')"><span class="ndot" style="background:#ffc840"></span>OPEC+</div>
+  <div class="nav-item" onclick="filterTopic(this,'spr')"><span class="ndot" style="background:#4a9edd"></span>SPR &amp; reserves</div>
   <div class="nav-item" onclick="filterTopic(this,'products')"><span class="ndot" style="background:#c090ff"></span>Refined products</div>
   <div class="nav-item" onclick="filterTopic(this,'forecasts')"><span class="ndot" style="background:#ffc840"></span>Bank forecasts</div>
   <div class="nav-item" onclick="filterTopic(this,'geopolitics')"><span class="ndot" style="background:#e8a840"></span>Geopolitics</div>
+
   <span class="slabel">Sources</span>
   <div class="src-chips" id="srcChips"></div>
 </aside>
 
+<!-- MAIN FEED -->
 <main class="main">
   <div class="feed-header">
     <span class="feed-title">Latest stories &#8212; newest first</span>
     <div class="feed-right">
+      <span class="updated-lbl" id="updatedLbl"></span>
       <span class="story-count" id="storyCount"></span>
-      <button class="refresh-btn" id="rfBtn" onclick="doRefresh()"><span class="rspin">&#8635;</span> Ask AI for update</button>
+      <button class="refresh-btn" id="rfBtn" onclick="doRefresh()"><span class="rspin">&#8635;</span> Refresh</button>
     </div>
   </div>
-  <div class="news-list" id="newsList"></div>
+  <div class="news-list" id="newsList">
+    <div style="padding:40px 18px;color:var(--text3);text-align:center;font-size:13px;">Loading news&#8230;</div>
+  </div>
 </main>
 
+<!-- CHAT -->
 <aside class="chat-panel">
   <div class="chat-title">
     <span>AI Market Analyst</span>
-    <span class="chat-tag">Claude via Cloudflare</span>
+    <span class="chat-tag">Claude</span>
   </div>
   <div class="chat-msgs" id="chatMsgs">
     <div class="cmsg ai">
-      Welcome. Brent is ~<strong>$102/bbl</strong> today (18 Mar) after a surprise API crude build of 6.56 mb. Citi warns of <strong>$110&#8211;$120</strong> base case, <strong>$150+</strong> severe scenario.<br><br>
-      Click any headline for details and source link. Hit <strong>Ask AI for update</strong> for a fresh market summary from the AI.
+      Welcome to Oil Intel. News loads automatically from the live feed.<br><br>
+      Click any headline for the full story and source link. Ask me anything about the oil market below.
     </div>
   </div>
   <div class="qprompts">
     <button class="qp" onclick="sq('What is driving oil prices right now?')">Price drivers</button>
     <button class="qp" onclick="sq('Citi forecast scenarios for Brent?')">Citi forecast</button>
-    <button class="qp" onclick="sq('Status of Strait of Hormuz today?')">Hormuz status</button>
-    <button class="qp" onclick="sq('What do the latest inventory figures tell us?')">Inventories</button>
+    <button class="qp" onclick="sq('Current status of the Strait of Hormuz?')">Hormuz</button>
+    <button class="qp" onclick="sq('What do the latest EIA/API inventory figures tell us?')">Inventories</button>
     <button class="qp" onclick="sq('Full oil market briefing for today')">Full briefing</button>
   </div>
   <div class="chat-input-area">
@@ -240,194 +264,175 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 </div>
 <script>
 const PROXY = "https://oil-intel-proxy.tomkernow.workers.dev";
+// news.json is auto-updated by GitHub Actions (see .github/workflows/update-news.yml)
+const NEWS_URL = "news.json";
 
-const NEWS = [
-  {source:"CNBC",sb:"sb-cnbc",time:"18 Mar · 10:44 ET",cat:"Prices",topic:"prices",
-   sent:"bear",sentTip:"Bearish intraday — inventory build offsets geopolitical premium",
-   hl:"Oil slips as API crude build of 6.56 mb surprises market despite UAE energy attacks",
-   teaser:"Brent fell 1.17% to $102.19/bbl and WTI dropped 1.81% to $94.56, as a 6.56 mb API build far exceeded the 380,000-barrel build expected.",
-   body:"Citi warned the data offers false comfort: their base case has Brent at $110–$120 if disruptions persist 4–6 weeks, and a severe scenario of $130 average with spikes to $150+. Attacks on UAE infrastructure included the world’s largest ultra-sour gas facility, Fujairah Oil Industry Zone, and a tanker near the Strait.",
-   url:"https://www.cnbc.com/2026/03/18/oil-prices-brent-wti-uae-energy-attacks-us-crude-inventories-hormuz.html"},
-  {source:"CNBC",sb:"sb-cnbc",time:"17 Mar · close",cat:"Prices",topic:"prices",
-   sent:"bull",sentTip:"Bullish — NATO hesitancy prolongs Hormuz impasse",
-   hl:"Oil tops $103 as NATO allies refuse to join US tanker escort coalition",
-   teaser:"Brent gained 3.2% to $103.42/bbl as Trump’s tanker coalition collapsed amid allied reluctance.",
-   body:"ING’s Warren Patterson: ‘The sheer scale of the oil supply disruption makes it difficult for the market to find an adequate solution.’ Trump posted that NATO allies were unwilling to join the US war against Iran. Ship movements through Hormuz have plunged from ~13 mb/d to near zero.",
-   url:"https://www.cnbc.com/2026/03/17/oil-prices-wti-brent-hormuz-coalition-shipping-trump.html"},
-  {source:"Bloomberg",sb:"sb-bloomberg",time:"17 Mar · 03:32 GMT",cat:"Products",topic:"products",
-   sent:"bull",sentTip:"Bullish — refined product crack spreads surging, diesel above $5",
-   hl:"Goldman: oil’s biggest supply shock will hurt refined products most — diesel and jet fuel worst hit",
-   teaser:"Goldman Sachs warns the Hormuz shock hits diesel and jet fuel harder than crude, as medium-heavy crude supplies collapse.",
-   body:"‘Prices have rallied much more for many refined products than for crude,’ wrote analysts Grigsby and Struyven. US diesel topped $5/gal for the first time since 2022. More than 3 mb/d of Middle Eastern refining capacity has already shut.",
-   url:"https://www.bloomberg.com/news/articles/2026-03-17/goldman-says-oil-s-biggest-shock-to-hurt-refined-products-most"},
-  {source:"Al Jazeera",sb:"sb-aljazeera",time:"16 Mar",cat:"Hormuz",topic:"hormuz",
-   sent:"bull",sentTip:"Bullish — Brent topped $106 with no coalition in sight",
-   hl:"Brent tops $106 as oil keeps rising with no end in sight to Strait of Hormuz closure",
-   teaser:"Brent hit $106/bbl as Trump urged China, Japan, France and the UK to deploy navies — none publicly committed.",
-   body:"The Strait normally carries ~20 mb/d — about one-fifth of global oil supply. ING strategists: ‘The only way to see oil prices trade lower on a sustained basis is by getting oil flowing through the Strait of Hormuz.’",
-   url:"https://www.aljazeera.com/economy/2026/3/16/oil-prices-keep-rising-as-trump-seeks-coalition-to-reopen-strait-of-hormuz"},
-  {source:"CBS News",sb:"sb-cbsnews",time:"16 Mar",cat:"Geopolitics",topic:"geopolitics",
-   sent:"bull",sentTip:"Bullish — broad Gulf attacks, first tanker dribbles through",
-   hl:"Iran attacks Saudi, UAE, Qatar and Bahrain energy targets; first tanker transits Hormuz",
-   teaser:"Saudi Arabia intercepted 35 Iranian drones targeting eastern region oil installations. One Aframax tanker became the first to transit Hormuz with AIS on.",
-   body:"Fujairah Oil Industry Zone struck, fires reported near Dubai airport, Shah gas field suspended. Trump said oil would ‘drop like a rock as soon as it’s over.’",
-   url:"https://www.cbsnews.com/live-updates/iran-war-oil-prices-strait-of-hormuz-trump-threat-kharg-island/"},
-  {source:"CNBC",sb:"sb-cnbc",time:"15 Mar",cat:"Prices",topic:"prices",
-   sent:"bear",sentTip:"Bearish short-term — SPR release and sell-off",
-   hl:"Oil falls 3% as Trump orders Kharg Island strikes and SPR release nears",
-   teaser:"Brent lost 2.84% to $100.21/bbl and WTI fell 5.28% to $93.50.",
-   body:"The US will release 172 mb from its SPR as part of the 400 mb IEA action. SPR draws take ~13 days to reach markets, limiting near-term bearish impact.",
-   url:"https://www.cnbc.com/2026/03/15/oil-prices-today-iran-war.html"},
-  {source:"Al Jazeera",sb:"sb-aljazeera",time:"15 Mar",cat:"SPR",topic:"spr",
-   sent:"bull",sentTip:"Bullish — SPR is a stop-gap, Hormuz problem remains",
-   hl:"Strategic oil release may calm markets but cannot fix Hormuz disruption — experts warn",
-   teaser:"The 400 mb IEA release covers only ~4 days of global consumption — a stop-gap, not a solution.",
-   body:"‘The release may soften the shock temporarily, but it will remain limited as long as freedom of tanker movement through Hormuz remains unresolved.’ LNG prices have risen ~60% since the war began.",
-   url:"https://www.aljazeera.com/economy/2026/3/15/strategic-oil-release-may-calm-markets-but-cannot-fix-hormuz-disruption"},
-  {source:"IEA",sb:"sb-iea",time:"14 Mar",cat:"Supply",topic:"supply",
-   sent:"bull",sentTip:"Bullish — largest oil supply disruption in recorded history",
-   hl:"IEA March 2026: Supply to plunge 8 mb/d — largest disruption in history",
-   teaser:"Gulf output cut by at least 10 mb/d. Hormuz tanker traffic has fallen from ~20 mb/d to near zero.",
-   body:"The IEA coordinated a 400 mb emergency reserve release — the largest ever — describing it as a ‘stop-gap.’ Over 4 mb/d of refining capacity is at risk. Global demand growth for 2026 revised down 210 kb/d.",
-   url:"https://www.iea.org/reports/oil-market-report-march-2026"},
-  {source:"CNBC",sb:"sb-cnbc",time:"13 Mar",cat:"Prices",topic:"prices",
-   sent:"bull",sentTip:"Bullish — second close above $100",
-   hl:"Brent closes above $100 for second day as Iran’s new supreme leader vows to keep fighting",
-   teaser:"Brent rose 2.67% to $103.14 for a second consecutive close above $100 — oil’s biggest two-week surge since COVID-19.",
-   body:"EnQuest CEO: ‘The market has never seen something of this magnitude before.’ Iran’s new supreme leader Mojtaba Khamenei denied Trump’s claim that Iran was ‘about to surrender.’",
-   url:"https://www.cnbc.com/2026/03/13/oil-100-price-brent-wti-trump-iran-war-surrender-khamenei.html"},
-  {source:"EIA",sb:"sb-eia",time:"10 Mar",cat:"Forecasts",topic:"forecasts",
-   sent:"neut",sentTip:"Neutral — near-term strength then $70 by year-end if conflict resolves",
-   hl:"EIA Short-Term Energy Outlook: Brent above $95 through May, then ~$70 by end-2026",
-   teaser:"EIA forecasts Brent stays above $95/bbl through May before falling to ~$70 by year-end, assuming gradual Hormuz recovery.",
-   body:"US crude production forecast at 13.6 mb/d in 2026. Henry Hub gas forecast at $3.80/MMBtu in 2026. The entire price forecast is highly dependent on conflict duration.",
-   url:"https://www.eia.gov/outlooks/steo/"}
-];
+const SYSTEM = `You are a senior oil market analyst. Provide concise, authoritative answers. Cite specific data and sources. Use market terminology. Focus on what is most relevant to crude oil traders and market participants.`;
 
-const SYSTEM = `You are a senior oil market analyst. Today is 18 March 2026.
-Key context: Brent ~$102.19 (-1.17%), WTI ~$94.56 (-1.81%). US-Israel-Iran war ongoing since 28 Feb. Hormuz near-shut. IEA: largest supply disruption ever, Gulf output cut ~10 mb/d. 400 mb IEA SPR release (largest ever). Surprise API crude build 6.56 mb today. Citi base case $110-$120 Brent; severe $130 avg, spikes to $150+. UAE infrastructure attacked. NATO allies refuse escort coalition. EIA forecasts Brent above $95 near-term then ~$70 by year-end. Goldman: diesel and jet fuel hit harder than crude.
-Be concise, authoritative, cite data and sources.`;
+const sentCls = {bull:"sent-bull",bear:"sent-bear",neut:"sent-neut"};
+const sentLbl = {bull:"\u25b2",bear:"\u25bc",neut:"\u25cf"};
 
-const sentCls={bull:"sent-bull",bear:"sent-bear",neut:"sent-neut"};
-const sentLbl={bull:"▲",bear:"▼",neut:"●"};
+let NEWS = [];
+let activeSrcs = new Set();
+let activeTopic = "all";
+let chatHistory = [];
+let lastLoadedIds = new Set();
 
-let activeSrcs=new Set(NEWS.map(n=>n.source));
-let activeTopic="all";
-let chatHistory=[];
-
-document.getElementById("dateLbl").textContent=
+document.getElementById("dateLbl").textContent =
   new Date().toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short",year:"numeric"});
 
-function initChips(){
-  const srcs=[...new Set(NEWS.map(n=>n.source))];
-  activeSrcs=new Set(srcs);
-  document.getElementById("srcChips").innerHTML=srcs.map(s=>
+// ── LOAD NEWS from news.json (committed by GitHub Actions) ──
+async function loadNews(isRefresh) {
+  const btn = document.getElementById("rfBtn");
+  if (isRefresh) { btn.disabled = true; btn.classList.add("spinning"); }
+
+  try {
+    // Cache-bust so we always get the latest version
+    const res = await fetch(NEWS_URL + "?v=" + Date.now());
+    if (!res.ok) throw new Error("news.json not found");
+    const data = await res.json();
+
+    const incoming = data.articles || [];
+    const newIds = new Set(incoming.map(a => a.id));
+
+    // Find articles that weren't in the previous load
+    const freshIds = isRefresh ? [...newIds].filter(id => !lastLoadedIds.has(id)) : [];
+
+    NEWS = incoming.map(a => ({...a, isFresh: freshIds.includes(a.id)}));
+    lastLoadedIds = newIds;
+
+    initChips();
+    renderFeed();
+
+    // Show updated timestamp
+    const updEl = document.getElementById("updatedLbl");
+    if (updEl && data.updated) updEl.textContent = "Updated " + data.updated;
+
+    if (isRefresh) {
+      btn.disabled = false; btn.classList.remove("spinning");
+      if (freshIds.length > 0) {
+        addMsg("ai", `&#10003; Feed refreshed &#8212; <strong>${freshIds.length} new article${freshIds.length>1?'s':''}</strong> added. They are highlighted in the feed.`);
+      } else {
+        addMsg("ai", `&#10003; Feed refreshed &#8212; no new articles since last check. The feed is up to date.`);
+      }
+    }
+  } catch(e) {
+    if (isRefresh) {
+      btn.disabled = false; btn.classList.remove("spinning");
+      addMsg("ai", "Could not load news.json. Make sure the GitHub Action has run at least once &#8212; go to your repo &#8594; Actions &#8594; Update Oil Market News &#8594; Run workflow.");
+    } else {
+      document.getElementById("newsList").innerHTML =
+        `<div style="padding:40px 18px;color:var(--text3);text-align:center;font-size:13px;">
+          Could not load news.json.<br><br>
+          Go to your GitHub repo &#8594; Actions &#8594; <strong>Update Oil Market News</strong> &#8594; <strong>Run workflow</strong><br>
+          to generate the first news file.
+        </div>`;
+    }
+  }
+}
+
+function doRefresh() { loadNews(true); }
+
+function initChips() {
+  const srcs = [...new Set(NEWS.map(n => n.source))];
+  activeSrcs = new Set(srcs);
+  document.getElementById("srcChips").innerHTML = srcs.map(s =>
     `<button class="src-chip on" onclick="toggleSrc(this,'${s}')">${s}</button>`
   ).join("");
 }
 
-function toggleSrc(el,src){
-  if(activeSrcs.has(src)){activeSrcs.delete(src);el.classList.replace("on","off");}
-  else{activeSrcs.add(src);el.classList.replace("off","on");}
+function toggleSrc(el, src) {
+  activeSrcs.has(src) ? activeSrcs.delete(src) : activeSrcs.add(src);
+  el.classList.toggle("on"); el.classList.toggle("off");
   renderFeed();
 }
 
-function filterTopic(el,topic){
-  document.querySelectorAll(".nav-item").forEach(e=>e.classList.remove("active"));
-  el.classList.add("active");activeTopic=topic;renderFeed();
+function filterTopic(el, topic) {
+  document.querySelectorAll(".nav-item").forEach(e => e.classList.remove("active"));
+  el.classList.add("active"); activeTopic = topic; renderFeed();
 }
 
-function renderFeed(){
-  const list=document.getElementById("newsList");
-  const f=NEWS.filter(n=>activeSrcs.has(n.source)&&(activeTopic==="all"||n.topic===activeTopic));
-  const c=document.getElementById("storyCount");
-  if(c)c.textContent=f.length+" stories";
-  if(!f.length){list.innerHTML=`<div style="padding:40px 18px;color:var(--text3);text-align:center;font-size:13px;">No stories match the current filters.</div>`;return;}
-  list.innerHTML=f.map(n=>`
-    <div class="ncard" onclick="expandCard(this)">
+function renderFeed() {
+  const list = document.getElementById("newsList");
+  const f = NEWS.filter(n => activeSrcs.has(n.source) && (activeTopic==="all" || n.topic===activeTopic));
+  const c = document.getElementById("storyCount");
+  if (c) c.textContent = f.length + " stories";
+  if (!f.length) { list.innerHTML = `<div style="padding:40px 18px;color:var(--text3);text-align:center;font-size:13px;">No stories match the current filters.</div>`; return; }
+  list.innerHTML = f.map(n => `
+    <div class="ncard${n.isFresh?' fresh':''}" onclick="expandCard(this)">
       <div class="nmeta">
         <span class="sbadge ${n.sb}">${n.source}</span>
         <span class="ntime">${n.time}</span>
         <span class="ncat">${n.cat}</span>
         <span class="sent ${sentCls[n.sent]}" title="${n.sentTip}">${sentLbl[n.sent]}</span>
+        ${n.isFresh ? '<span class="new-badge">New</span>' : ''}
       </div>
       <div class="nheadline">${n.hl}</div>
       <div class="nteaser">${n.teaser}</div>
       <div class="nbody">${n.body}</div>
       <div class="nfooter">
-        <a class="read-link" href="${n.url}" target="_blank" rel="noopener">Read at ${n.source} ↗</a>
-        <button class="ask-btn" onclick="event.stopPropagation();sq('Tell me more about: ${n.hl.replace(/'/g,"\'")}')">Ask analyst ↗</button>
+        <a class="read-link" href="${n.url}" target="_blank" rel="noopener">Read at ${n.source} &#8599;</a>
+        <button class="ask-btn" onclick="event.stopPropagation();sq('Tell me more about: ${n.hl.replace(/'/g,"\\'").replace(/"/g,'\\"')}')">Ask analyst &#8599;</button>
       </div>
     </div>`).join("");
 }
 
-function expandCard(el){
-  const was=el.classList.contains("expanded");
-  document.querySelectorAll(".ncard").forEach(e=>e.classList.remove("expanded"));
-  if(!was)el.classList.add("expanded");
+function expandCard(el) {
+  const was = el.classList.contains("expanded");
+  document.querySelectorAll(".ncard").forEach(e => e.classList.remove("expanded"));
+  if (!was) el.classList.add("expanded");
 }
 
-// Refresh = ask AI for a fresh market summary
-async function doRefresh(){
-  const btn=document.getElementById("rfBtn");
-  btn.disabled=true;btn.classList.add("spinning");
-  sq("Give me a fresh oil market update for right now. What are the key price moves, the most important developments, and anything new I should know?");
-  setTimeout(()=>{btn.disabled=false;btn.classList.remove("spinning");},2000);
+// ── CHAT ──
+function addMsg(role, html) {
+  const c = document.getElementById("chatMsgs");
+  const d = document.createElement("div");
+  d.className = "cmsg " + role; d.innerHTML = html;
+  c.appendChild(d); c.scrollTop = c.scrollHeight;
 }
-
-function addMsg(role,html){
-  const c=document.getElementById("chatMsgs");
-  const d=document.createElement("div");
-  d.className="cmsg "+role;d.innerHTML=html;
-  c.appendChild(d);c.scrollTop=c.scrollHeight;
+function showTyping() {
+  const c = document.getElementById("chatMsgs");
+  const t = document.createElement("div");
+  t.className = "typing-ind"; t.id = "typInd";
+  t.innerHTML = "<span></span><span></span><span></span>";
+  c.appendChild(t); c.scrollTop = c.scrollHeight;
 }
+function removeTyping() { const t=document.getElementById("typInd"); if(t) t.remove(); }
 
-function showTyping(){
-  const c=document.getElementById("chatMsgs");
-  const t=document.createElement("div");
-  t.className="typing-ind";t.id="typInd";
-  t.innerHTML="<span></span><span></span><span></span>";
-  c.appendChild(t);c.scrollTop=c.scrollHeight;
-}
-
-function removeTyping(){const t=document.getElementById("typInd");if(t)t.remove();}
-
-async function callClaude(msg){
+async function callClaude(msg) {
   chatHistory.push({role:"user",content:msg});
   showTyping();
-  try{
-    const res=await fetch(PROXY,{
+  try {
+    const res = await fetch(PROXY, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:900,system:SYSTEM,messages:chatHistory})
+      body: JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:900,system:SYSTEM,messages:chatHistory})
     });
-    const data=await res.json();
+    const data = await res.json();
     removeTyping();
-    const reply=data.content?.map(b=>b.text||"").join("")||"No response received.";
+    const reply = data.content?.map(b=>b.text||"").join("") || "No response received.";
     chatHistory.push({role:"assistant",content:reply});
-    addMsg("ai",reply.replace(/\n/g,"<br>"));
-  }catch(e){
+    addMsg("ai", reply.replace(/\n/g,"<br>"));
+  } catch(e) {
     removeTyping();
-    addMsg("ai","Could not reach the AI — check that your Cloudflare Worker is running at: <code style=\"font-size:11px;color:var(--accent)\">oil-intel-proxy.tomkernow.workers.dev</code>");
+    addMsg("ai","Could not reach the AI &#8212; check your Cloudflare Worker is active.");
   }
 }
 
-function sq(q){addMsg("user",q);callClaude(q);}
-
-function sendChat(){
-  const inp=document.getElementById("chatInput");
-  const q=inp.value.trim();if(!q)return;
-  inp.value="";sq(q);
+function sq(q) { addMsg("user",q); callClaude(q); }
+function sendChat() {
+  const inp = document.getElementById("chatInput");
+  const q = inp.value.trim(); if (!q) return;
+  inp.value = ""; sq(q);
 }
-
-document.getElementById("chatInput").addEventListener("keydown",e=>{
-  if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendChat();}
+document.getElementById("chatInput").addEventListener("keydown", e => {
+  if (e.key==="Enter" && !e.shiftKey) { e.preventDefault(); sendChat(); }
 });
 
-if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 
-initChips();
-renderFeed();
+// Load news on startup
+loadNews(false);
 </script>
 </body>
 </html>
